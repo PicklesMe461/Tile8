@@ -163,64 +163,120 @@ def nextState(board, move):
 
 # A* algorithm to solve the puzzle and return the path
 def aStar(board):
-    iteration = 0
-    # initialize the open list
+    initial_state = board
+    # Check if the initial state is the goal state
+    if np.array_equal(initial_state, np.array([[1,2,3],[4,5,6],[7,8,0]])):
+        print("The initial state is the goal state")
+        return []
+    # define the open and closed lists
+    # The lists will contain the following information:
+    # [state_id, state, parent_id, g, f]
     open_list = []
-    # initialize the closed list
     closed_list = []
-    # initialize the path list
-    path = []
-    # initialize the cost
-    cost = 0
-    # initialize the current state
-    current_state = board
-    # loop until the current state is the goal state
-    while not np.array_equal(current_state, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])):
-        # iteration counter
-        iteration += 1
-        # break if the iteration is more than 1000
-        if iteration > 1000:
-            print("Iteration limit reached!")
-            return path
-        # get the possible moves
-        moves = possibleMoves(current_state)
-        # loop through the possible moves
-        for move in moves:
-            # get the next state
-            next_state = nextState(current_state, move)
-            # check if the next state is not in the closed list
-            if not any(np.array_equal(next_state, state) for state in closed_list):
-                # calculate the cost of the next state
-                next_cost = cost + 1 + manhattanDistance(next_state)
-                # check if the next state is not in the open list
-                if not any(np.array_equal(next_state, state[0]) for state in open_list):
-                    # add the next state to the open list
-                    open_list.append([next_state, next_cost, move, current_state])
-        # now all possible states are in the open list
-        # check if the open list is empty
-        if not open_list:
-            # return the path
-            return path + [current_state]
+    # define a state id to keep track of the states
+    state_id = 0
+    # Add the initial state to the open list
+    open_list.append([state_id, initial_state, 0, 0, 0])
+    # increment the state id
+    state_id += 1
+    # initialize the iteration
+    iteration = 0
+    # loop until the open list is empty
+    while len(open_list) != 0 and iteration < 1000:
+        # sort the open list based on the f value
+        open_list.sort(key=lambda x: x[4])
+        # get the first state from the open list
+        current_state = open_list[0]
+        # Check if the current state is the goal state
+        if np.array_equal(current_state[1], np.array([[1,2,3],[4,5,6],[7,8,0]])):
+            # initialize the path
+            path = []
+            # loop until the current state is the initial state
+            while current_state[2] != 0:
+                # add the move to the path
+                path.append(current_state[1])
+                # find the parent state by looping through the closed list by id
+                for state in closed_list:
+                    if state[0] == current_state[2]:
+                        current_state = state
+                        break
+                    
+ 
+            # return the reversed path and print the number of iterations
+            print("The number of iterations is: ", iteration)
+            return path[::-1]
+        # remove the current state from the open list
+        open_list.pop(0)
         # add the current state to the closed list
         closed_list.append(current_state)
-        # sort the open list based on the cost
-        open_list.sort(key=lambda x: x[1])
-        # update the current state to the first state in the open list
-        current_state = open_list[0][0]
+        # record the current state id
+        current_state_id = current_state[0]
+        # expand the current state
+        possible_moves = possibleMoves(current_state[1])
+        # loop through the possible moves
+        for move in possible_moves:
+            # get the next state
+            next_state = nextState(current_state[1], move)
+            # loop through the closed list to check if the state is already there
+            state_in_closed_list = False
+            for state in closed_list:
+                if np.array_equal(state[1], next_state):
+                    state_in_closed_list = True
+                    break
+            # if the state is in the closed list, skip it
+            if state_in_closed_list:
+                continue
+            #loop through the open list to check if the state is already there
+            state_in_open_list = False
+            for state in open_list:
+                if np.array_equal(state[1], next_state):
+                    state_in_open_list = True
+                    break
+            # if the state is in the open list skip it
+            if state_in_open_list:
+                continue
+            # check if the state is the goal state
+            if np.array_equal(next_state, np.array([[1,2,3],[4,5,6],[7,8,0]])):
+                # initialize the path
+                path = []
+                # loop until the current state is the initial state
+                while current_state_id != 0:
+                    # add the move to the path
+                    path.append(current_state[1])
+                    # find the parent state by looping through the closed list by id
+                    for state in closed_list:
+                        if state[0] == current_state[2]:
+                            current_state = state
+                            break
+                    # get the current state id
+                    current_state_id = current_state[0]
+                # return the reversed path and print the number of iterations
+                print("The number of iterations is: ", iteration)
+                return path[::-1]
+            # calculate the g value
+            g = current_state[3] + 1
+            # calculate the f value
+            f = g + manhattanDistance(next_state)
+            # add the state to the open list
+            open_list.append([state_id, next_state, current_state_id, g, f])
+            # increment the state id
+            state_id += 1
+        # increment the iteration
+        iteration += 1
+    # return an empty path if the open list is empty
+    print("The open list is empty, no path found")
+    return []
 
-        # update the cost
-        cost = open_list[0][1]
-        # update the path
-        path.append(open_list[0][2])
-        # remove the chosen state from the open list
-        open_list = open_list[1:]
-
-    # return the path
-    return path
 
 
 
-        
+
+
+
+
+
+
+
 
 
 
@@ -231,6 +287,7 @@ movez = t.shuffle(4, debugON=True) # for longer shuffle series consider not prin
 print(movez)
 print(t)
 print(manhattanDistance(t.Board))
+print("Here is the path found")
 foundPath = aStar(t.Board)
 print(foundPath)
 # Apply found Path
