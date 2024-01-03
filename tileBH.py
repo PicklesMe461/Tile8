@@ -207,10 +207,13 @@ def aStar(board):
         open_list.sort(key=lambda x: x[1])
         # update the current state to the first state in the open list
         current_state = open_list[0][0]
+
         # update the cost
         cost = open_list[0][1]
         # update the path
         path.append(open_list[0][2])
+        # remove the chosen state from the open list
+        open_list = open_list[1:]
 
     # return the path
     return path
