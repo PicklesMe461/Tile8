@@ -107,9 +107,24 @@ class EightTile():
         return np.array_equal(me.__winner, me.__board)
     
 
+# Manhattan distance calculation function
+def manhattanDistance(board):
+    # initialize the distance to 0
+    distance = 0
+    # loop through the board
+    for i in range(3):
+        for j in range(3):
+            # check if the value is not 0
+            if board[i][j] != 0:
+                # calculate the distance of the value from its correct position
+                distance += abs(i - (board[i][j] - 1) // 3) + abs(j - (board[i][j] - 1) % 3)
+    # return the distance
+    return distance
 
-
-
+'''
 t = EightTile()
-movez = t.shuffle(3, debugON=True) # for longer shuffle series consider not printing :)
+movez = t.shuffle(4, debugON=True) # for longer shuffle series consider not printing :)
 print(movez)
+print(t)
+print(manhattanDistance(t.Board))
+'''
