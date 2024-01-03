@@ -237,6 +237,8 @@ def aStar(board):
             if np.array_equal(next_state, np.array([[1,2,3],[4,5,6],[7,8,0]])):
                 # initialize the path
                 path = []
+                # add the move to the path
+                path.append(move)
                 # loop until the current state is the initial state
                 while current_state_id != 0:
                     # add the move to the path
@@ -264,18 +266,6 @@ def aStar(board):
     # return an empty path if the open list is empty
     print("The open list is empty, no path found")
     return []
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 t = EightTile()
