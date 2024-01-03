@@ -170,13 +170,13 @@ def aStar(board):
         return []
     # define the open and closed lists
     # The lists will contain the following information:
-    # [state_id, state, parent_id, g, f]
+    # [state_id, state, parent_id, g, f, move]
     open_list = []
     closed_list = []
     # define a state id to keep track of the states
     state_id = 0
     # Add the initial state to the open list
-    open_list.append([state_id, initial_state, 0, 0, 0])
+    open_list.append([state_id, initial_state, 0, 0, 0, None])
     # increment the state id
     state_id += 1
     # initialize the iteration
@@ -194,14 +194,12 @@ def aStar(board):
             # loop until the current state is the initial state
             while current_state[2] != 0:
                 # add the move to the path
-                path.append(current_state[1])
+                path.append(current_state[5])
                 # find the parent state by looping through the closed list by id
                 for state in closed_list:
                     if state[0] == current_state[2]:
                         current_state = state
                         break
-                    
- 
             # return the reversed path and print the number of iterations
             print("The number of iterations is: ", iteration)
             return path[::-1]
@@ -242,7 +240,7 @@ def aStar(board):
                 # loop until the current state is the initial state
                 while current_state_id != 0:
                     # add the move to the path
-                    path.append(current_state[1])
+                    path.append(current_state[5])
                     # find the parent state by looping through the closed list by id
                     for state in closed_list:
                         if state[0] == current_state[2]:
@@ -258,7 +256,7 @@ def aStar(board):
             # calculate the f value
             f = g + manhattanDistance(next_state)
             # add the state to the open list
-            open_list.append([state_id, next_state, current_state_id, g, f])
+            open_list.append([state_id, next_state, current_state_id, g, f, move])
             # increment the state id
             state_id += 1
         # increment the iteration
@@ -280,10 +278,8 @@ def aStar(board):
 
 
 
-
-
 t = EightTile()
-movez = t.shuffle(4, debugON=True) # for longer shuffle series consider not printing :)
+movez = t.shuffle(20, debugON=True) # for longer shuffle series consider not printing :)
 print(movez)
 print(t)
 print(manhattanDistance(t.Board))
