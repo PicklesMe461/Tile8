@@ -121,10 +121,54 @@ def manhattanDistance(board):
     # return the distance
     return distance
 
-'''
+# Function to return the possible moves
+def possibleMoves(board):
+    # initialize the possible moves list
+    moves = []
+    # get the position of the empty tile
+    pos = np.where(board == 0)
+    # check if the empty tile is not on the first row
+    if pos[0] != 0:
+        # add the move to the list
+        moves.append([-1, 0])
+    # check if the empty tile is not on the last row
+    if pos[0] != 2:
+        # add the move to the list
+        moves.append([1, 0])
+    # check if the empty tile is not on the first column
+    if pos[1] != 0:
+        # add the move to the list
+        moves.append([0, -1])
+    # check if the empty tile is not on the last column
+    if pos[1] != 2:
+        # add the move to the list
+        moves.append([0, 1])
+    # return the list of possible moves
+    return moves
+
+# Function to return the next state when a move is applied
+def nextState(board, move):
+    # get the position of the empty tile
+    pos = np.where(board == 0)
+    # get the new position of the empty tile
+    new_pos = [pos[0][0] + move[0], pos[1][0] + move[1]]
+    # create a copy of the board
+    new_board = board.copy()
+    # swap the empty tile with the new position
+    new_board[pos[0][0]][pos[1][0]] = new_board[new_pos[0]][new_pos[1]]
+    new_board[new_pos[0]][new_pos[1]] = 0
+    # return the new board
+    return new_board
+
+
+
 t = EightTile()
 movez = t.shuffle(4, debugON=True) # for longer shuffle series consider not printing :)
 print(movez)
 print(t)
 print(manhattanDistance(t.Board))
-'''
+print(possibleMoves(t.Board))
+print("Here are the next states:")
+for move in possibleMoves(t.Board):
+    print(nextState(t.Board, move))
+
