@@ -161,14 +161,87 @@ def nextState(board, move):
     return new_board
 
 
+# A* algorithm to solve the puzzle and return the path
+def aStar(board):
+    iteration = 0
+    # initialize the open list
+    open_list = []
+    # initialize the closed list
+    closed_list = []
+    # initialize the path list
+    path = []
+    # initialize the cost
+    cost = 0
+    # initialize the current state
+    current_state = board
+    # loop until the current state is the goal state
+    while not np.array_equal(current_state, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])):
+        # iteration counter
+        iteration += 1
+        # break if the iteration is more than 1000
+        if iteration > 1000:
+            print("Iteration limit reached!")
+            return path
+        # get the possible moves
+        moves = possibleMoves(current_state)
+        # loop through the possible moves
+        for move in moves:
+            # get the next state
+            next_state = nextState(current_state, move)
+            # check if the next state is not in the closed list
+            if not any(np.array_equal(next_state, state) for state in closed_list):
+                # calculate the cost of the next state
+                next_cost = cost + 1 + manhattanDistance(next_state)
+                # check if the next state is not in the open list
+                if not any(np.array_equal(next_state, state[0]) for state in open_list):
+                    # add the next state to the open list
+                    open_list.append([next_state, next_cost, move, current_state])
+        # now all possible states are in the open list
+        # check if the open list is empty
+        if not open_list:
+            # return the path
+            return path + [current_state]
+        # add the current state to the closed list
+        closed_list.append(current_state)
+        # sort the open list based on the cost
+        open_list.sort(key=lambda x: x[1])
+        # update the current state to the first state in the open list
+        current_state = open_list[0][0]
+        # update the cost
+        cost = open_list[0][1]
+        # update the path
+        path.append(open_list[0][2])
+
+    # return the path
+    return path
+
+
+
+        
+
+
+
+
 
 t = EightTile()
 movez = t.shuffle(4, debugON=True) # for longer shuffle series consider not printing :)
 print(movez)
 print(t)
 print(manhattanDistance(t.Board))
+foundPath = aStar(t.Board)
+print(foundPath)
+# Apply found Path
+for move in foundPath:
+    t.ApplyMove(move)
+
+print(t)
+
+
+
+
+'''
 print(possibleMoves(t.Board))
 print("Here are the next states:")
 for move in possibleMoves(t.Board):
     print(nextState(t.Board, move))
-
+'''
