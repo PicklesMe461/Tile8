@@ -173,7 +173,7 @@ class Solve8:
         initial_state = givenBoard
         # Check if the initial state is the goal state
         if np.array_equal(initial_state, np.array([[1,2,3],[4,5,6],[7,8,0]])):
-            print("The initial state is the goal state")
+            #print("The initial state is the goal state")
             return []
         # define the open and closed lists
         # The lists will contain the following information:
@@ -208,7 +208,7 @@ class Solve8:
                             current_state = state
                             break
                 # return the reversed path and print the number of iterations
-                print("The number of iterations is: ", iteration)
+                #print("The number of iterations is: ", iteration)
                 return path[::-1]
             # remove the current state from the open list
             open_list.pop(0)
@@ -258,7 +258,7 @@ class Solve8:
                         # get the current state id
                         current_state_id = current_state[0]
                     # return the reversed path and print the number of iterations
-                    print("The number of iterations is: ", iteration)
+                    #print("The number of iterations is: ", iteration)
                     return path[::-1]
                 # calculate the g value
                 g = current_state[3] + 1
@@ -271,5 +271,5 @@ class Solve8:
             # increment the iteration
             iteration += 1
         # return an empty path if the open list is empty
-        print("The open list is empty, no path found")
+        #print("The open list is empty, no path found")
         return []
