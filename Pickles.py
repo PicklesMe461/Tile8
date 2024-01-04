@@ -113,6 +113,18 @@ class EightTile():
 
 
 class Solve8:
+
+    # The lists will contain the following information:
+    # [state_id, state, parent_id, g, f, move]
+    
+    def __init__(self):
+        self.open_list = []
+        self.closed_list = []
+        
+        
+    def __str__(self):
+        return 'Pickles'
+    
     @staticmethod
     def manhattanDistance(board):
         # initialize the distance to 0
@@ -176,24 +188,21 @@ class Solve8:
             #print("The initial state is the goal state")
             return []
         # define the open and closed lists
-        # The lists will contain the following information:
-        # [state_id, state, parent_id, g, f, move]
-        open_list = []
-        closed_list = []
+
         # define a state id to keep track of the states
         state_id = 0
         # Add the initial state to the open list
-        open_list.append([state_id, initial_state, 0, 0, 0, None])
+        me.open_list.append([state_id, initial_state, 0, 0, 0, None])
         # increment the state id
         state_id += 1
         # initialize the iteration
         iteration = 0
         # loop until the open list is empty
-        while len(open_list) != 0 and iteration < 1000:
+        while len(me.open_list) != 0 and iteration < 1000:
             # sort the open list based on the f value
-            open_list.sort(key=lambda x: x[4])
+            me.open_list.sort(key=lambda x: x[4])
             # get the first state from the open list
-            current_state = open_list[0]
+            current_state = me.open_list[0]
             # Check if the current state is the goal state
             if np.array_equal(current_state[1], np.array([[1,2,3],[4,5,6],[7,8,0]])):
                 # initialize the path
@@ -203,7 +212,7 @@ class Solve8:
                     # add the move to the path
                     path.append(current_state[5])
                     # find the parent state by looping through the closed list by id
-                    for state in closed_list:
+                    for state in me.closed_list:
                         if state[0] == current_state[2]:
                             current_state = state
                             break
@@ -211,9 +220,9 @@ class Solve8:
                 #print("The number of iterations is: ", iteration)
                 return path[::-1]
             # remove the current state from the open list
-            open_list.pop(0)
+            me.open_list.pop(0)
             # add the current state to the closed list
-            closed_list.append(current_state)
+            me.closed_list.append(current_state)
             # record the current state id
             current_state_id = current_state[0]
             # expand the current state
@@ -224,7 +233,7 @@ class Solve8:
                 next_state = Solve8.nextState(current_state[1], move)
                 # loop through the closed list to check if the state is already there
                 state_in_closed_list = False
-                for state in closed_list:
+                for state in me.closed_list:
                     if np.array_equal(state[1], next_state):
                         state_in_closed_list = True
                         break
@@ -233,7 +242,7 @@ class Solve8:
                     continue
                 #loop through the open list to check if the state is already there
                 state_in_open_list = False
-                for state in open_list:
+                for state in me.open_list:
                     if np.array_equal(state[1], next_state):
                         state_in_open_list = True
                         break
@@ -251,7 +260,7 @@ class Solve8:
                         # add the move to the path
                         path.append(current_state[5])
                         # find the parent state by looping through the closed list by id
-                        for state in closed_list:
+                        for state in me.closed_list:
                             if state[0] == current_state[2]:
                                 current_state = state
                                 break
@@ -265,7 +274,7 @@ class Solve8:
                 # calculate the f value
                 f = g + Solve8.manhattanDistance(next_state)
                 # add the state to the open list
-                open_list.append([state_id, next_state, current_state_id, g, f, move])
+                me.open_list.append([state_id, next_state, current_state_id, g, f, move])
                 # increment the state id
                 state_id += 1
             # increment the iteration
