@@ -114,9 +114,8 @@ solver = s8.Solve8()
 movez = t.shuffle(20, debugON=True) # for longer shuffle series consider not printing :)
 print(movez)
 print(t)
-print(solver.manhattanDistance(t.Board))
 print("Here is the path found")
-foundPath = solver.Solve(t.Board)
+foundPath = solver.Solve(t)
 print(foundPath)
 # Apply found Path
 for move in foundPath:

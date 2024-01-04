@@ -49,12 +49,13 @@ class Solve8:
 
     @staticmethod
     def nextState(board, move):
+        givenBoard = board
         # get the position of the empty tile
-        pos = np.where(board == 0)
+        pos = np.where(givenBoard == 0)
         # get the new position of the empty tile
         new_pos = [pos[0][0] + move[0], pos[1][0] + move[1]]
         # create a copy of the board
-        new_board = board.copy()
+        new_board = givenBoard.copy()
         # swap the empty tile with the new position
         new_board[pos[0][0]][pos[1][0]] = new_board[new_pos[0]][new_pos[1]]
         new_board[new_pos[0]][new_pos[1]] = 0
@@ -63,7 +64,8 @@ class Solve8:
 
     
     def Solve(me, board):
-        initial_state = board
+        givenBoard = board.Board
+        initial_state = givenBoard
         # Check if the initial state is the goal state
         if np.array_equal(initial_state, np.array([[1,2,3],[4,5,6],[7,8,0]])):
             print("The initial state is the goal state")
