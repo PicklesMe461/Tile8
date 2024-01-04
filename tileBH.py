@@ -4,7 +4,7 @@ import numpy as np
 import random
 from tabulate import tabulate
 from IPython.display import clear_output
-import Solve8 as s8
+import Pickles as s8
 import numpy as np
 
 
